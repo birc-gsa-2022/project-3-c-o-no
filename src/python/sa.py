@@ -1,5 +1,8 @@
 # Python code made to understand the algorithms before implementing it in C
 
+import st
+from collections import deque
+
 def constructSAradix(x):
     x += "$"
     n = len(x)
@@ -29,15 +32,24 @@ def constructSAradix(x):
             sa[saIndex] = suffixIndex
     return sa
 
+def constructSAtree(x):
+    node = st.constructTreeMcCreight(x)
+    stack = deque()
+    stack.append(node)
+    while stack:
+        node = stack.pop()
+        if node.isInnerNode():
+            children = node.childrenOrLabel
+            for childChar in sorted(children.keys(), reverse=True):
+                stack.append(children[childChar])
+        else:
+            yield node.childrenOrLabel
 
 
 
 def searchSA(x, p, sa):
     x += "$"
     n = len(sa)
-    start = 0
-    end = n
-    mid = int(n/2)
 
     def binarySearch(patchar, patindex, intervalStart, intervalEnd, mode=0):
         # mode = 0: Stop when found
@@ -45,10 +57,7 @@ def searchSA(x, p, sa):
         # mode = -1: Find right border
         while intervalStart != intervalEnd:
             mid = int((intervalStart + intervalEnd)/2)
-            if sa[mid]+patindex>=n:
-                xchar = "!" # !<$<a
-            else:
-                xchar = x[sa[mid]+patindex]
+            xchar = x[sa[mid]+patindex]
             match = patchar == xchar
             if match:
                 if mode == 0:
@@ -64,6 +73,8 @@ def searchSA(x, p, sa):
                     intervalStart = mid + 1
         return intervalStart, 0, intervalEnd
 
+    start = 0
+    end = n
     for i, pchar in enumerate(p):
         #Find first occurence
         s,m,e = binarySearch(pchar, i, start, end, mode=0)
@@ -72,11 +83,12 @@ def searchSA(x, p, sa):
         #Find left interval:
         start, _, _ = binarySearch(pchar, i, s, m, mode=-1)
         
-        #Find right interval: 
+        #Find right interval:
         _, _, end = binarySearch(pchar, i, m, e, mode=1)
     
     for i in range(start, end):
         yield sa[i]
+
 
 def search(x, p):
     if not x or not p:
