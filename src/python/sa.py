@@ -3,6 +3,7 @@
 import st
 from collections import deque
 
+
 def constructSAradix(x):
     x += "$"
     n = len(x)
@@ -32,6 +33,7 @@ def constructSAradix(x):
             sa[saIndex] = suffixIndex
     return sa
 
+
 def constructSAtree(x):
     node = st.constructTreeMcCreight(x)
     stack = deque()
@@ -44,7 +46,6 @@ def constructSAtree(x):
                 stack.append(children[childChar])
         else:
             yield node.childrenOrLabel
-
 
 
 def searchSA(x, p, sa):
@@ -76,14 +77,14 @@ def searchSA(x, p, sa):
     start = 0
     end = n
     for i, pchar in enumerate(p):
-        #Find first occurence
-        s,m,e = binarySearch(pchar, i, start, end, mode=0)
-        if s==e:
+        # Find first occurence
+        s, m, e = binarySearch(pchar, i, start, end, mode=0)
+        if s == e:
             return
-        #Find left interval:
+        # Find left interval:
         start, _, _ = binarySearch(pchar, i, s, m, mode=-1)
         
-        #Find right interval:
+        # Find right interval:
         _, _, end = binarySearch(pchar, i, m, e, mode=1)
     
     for i in range(start, end):

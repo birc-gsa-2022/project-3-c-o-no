@@ -19,6 +19,20 @@ Once you have implemented the `sa` program (and tested it to the best of your ab
 
 *Which algorithm did you use to construct the suffix array. What is its running time?*
 
+Changes to the parser from the previous projects adds some extra information of the alphabet of the string. <br>
+Radix sort needs σ different buckets. The order of the buckets (aka order of symbols) also needs to be known. 
+This is done in the parser while parsing the sequence. Ascii char 32 to 127 is printable, 
+which means there are 96 possible symbols, not including the sentinel \0. 
+An array of size 96 filled with zeroes is made. This is done in O(96). As the string is parsed, the array is filled with the count of 
+each char's occurences. At the same time a count of how many different chars exist (σ-1) is made. 
+This is done in O(n) time, which is already included in the parsing time. Two new arrays 
+(one representing the alphabet and one representing the number of occurnces) 
+of size σ is made in O(96) by finding the σ-1 elements and including the sentinel. In total this is done in 2O(96)+O(n)=O(n), 
+which does not add to the assymptotic running time. In addition, O(96)+2O(σ)=O(σ) memory is used, which, since it is withing ascii, is constant. 
+
+
+
+
 ## Insights you may have had while implementing the algorithm
 
 ## Problems encountered if any

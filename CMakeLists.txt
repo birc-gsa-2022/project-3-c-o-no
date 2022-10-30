@@ -4,4 +4,4 @@ enable_testing()
 
 add_executable(sa src/sa.c)
 add_test(sa sa)
-
+add_executable(testing test/tests.c)
