@@ -3,7 +3,7 @@ import st
 import random as r
 
 
-SAtests = {"a": [1, 0], "ab": [2,0,1], "abc": [3,0,1,2], "cba": [3,2,1,0], "abab": [4, 2, 0, 3, 1]}
+SAtests = {"": [0], "a": [1, 0], "ab": [2,0,1], "abc": [3,0,1,2], "cba": [3,2,1,0], "abab": [4, 2, 0, 3, 1]}
 
 def test_constructSAradixDefined():
     for x, res in SAtests.items():
@@ -41,7 +41,7 @@ def test_searchRandom():
 def compareAlgorithmsSA(x, *algorithms):
     res = [a(x) for a in algorithms]
     for i in range(len(res)-1):
-        assert list(res[i]) == list(res[i+1]), f"Different results for x={x}. {algorithms[i].__name__} gave {res[i]} while {algorithms[i+1].__name__} gave {res[i+1]}"
+        assert list(res[i]) == list(res[i+1]), f"Different results for x={x}. {algorithms[i].__name__} gave {list(res[i])} while {algorithms[i+1].__name__} gave {list(res[i+1])}"
 
 def test_compareSA():
     for n in range(50):

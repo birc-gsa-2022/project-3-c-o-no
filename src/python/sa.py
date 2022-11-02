@@ -47,7 +47,6 @@ def constructSAtree(x):
         else:
             yield node.childrenOrLabel
 
-
 def searchSA(x, p, sa):
     x += "$"
     n = len(sa)
