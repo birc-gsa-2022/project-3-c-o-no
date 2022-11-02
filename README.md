@@ -19,6 +19,8 @@ Once you have implemented the `sa` program (and tested it to the best of your ab
 
 *Which algorithm did you use to construct the suffix array. What is its running time?*
 
+
+Change this to map x directly! <br>
 Changes to the parser from the previous projects adds some extra information of the alphabet of the string. <br>
 Radix sort needs σ different buckets. The order of the buckets (aka order of symbols) also needs to be known. 
 This is done in the parser while parsing the sequence. Ascii char 32 to 127 is printable, 

@@ -11,25 +11,25 @@ def constructSAradix(x):
     bucketIndecies = dict()
     buckets = dict()
     for char in x:
-        bucketIndecies[char] = bucketIndecies.get(char, 0)+1
+        bucketIndecies[char] = bucketIndecies.get(char, 0) + 1
         buckets[char] = 0
     accumSum = 0
     for char in sorted(bucketIndecies.keys()):
         count = bucketIndecies[char]
         bucketIndecies[char] = accumSum
         accumSum += count
-    
-    for i in range(n-1, -1, -1):
+
+    for i in range(n - 1, -1, -1):
         for char in buckets:
             buckets[char] = 0
 
         saOld = sa.copy()
         for suffixIndex in saOld:
-            charIndex = (suffixIndex+i)%n
+            charIndex = (suffixIndex + i) % n
             char = x[charIndex]
             elemInBucket = buckets[char]
             saIndex = bucketIndecies[char] + elemInBucket
-            buckets[char] = elemInBucket+1
+            buckets[char] = elemInBucket + 1
             sa[saIndex] = suffixIndex
     return sa
 
@@ -47,6 +47,7 @@ def constructSAtree(x):
         else:
             yield node.childrenOrLabel
 
+
 def searchSA(x, p, sa):
     x += "$"
     n = len(sa)
@@ -56,16 +57,16 @@ def searchSA(x, p, sa):
         # mode = 1: Find left border
         # mode = -1: Find right border
         while intervalStart != intervalEnd:
-            mid = int((intervalStart + intervalEnd)/2)
-            xchar = x[sa[mid]+patindex]
+            mid = int((intervalStart + intervalEnd) / 2)
+            xchar = x[sa[mid] + patindex]
             match = patchar == xchar
             if match:
                 if mode == 0:
                     return intervalStart, mid, intervalEnd
                 elif mode == -1:
                     intervalEnd = mid
-                else: 
-                    intervalStart = mid + 1 
+                else:
+                    intervalStart = mid + 1
             else:
                 if xchar > patchar:
                     intervalEnd = mid
@@ -82,10 +83,10 @@ def searchSA(x, p, sa):
             return
         # Find left interval:
         start, _, _ = binarySearch(pchar, i, s, m, mode=-1)
-        
+
         # Find right interval:
         _, _, end = binarySearch(pchar, i, m, e, mode=1)
-    
+
     for i in range(start, end):
         yield sa[i]
 

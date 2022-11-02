@@ -6,16 +6,44 @@
 #include <stdint-gcc.h>
 #include "helper.h"
 
+//Question: When does it make sense to use array[n] vs. malloc?
 
 int * constructSARadix(struct Fasta fasta)
 {
-    char * x = fasta.fasta_sequence;
-    int n = strlen(x);
+    char* x = fasta.fasta_sequence;
+    int n = fasta.fasta_len;
     int* sa = malloc(n * sizeof *sa);
+    int* saCopy = malloc(n * sizeof *sa);
+    int** currentSa = &sa;
+    int** otherSa = &saCopy;
+    int** temp = &sa;
+
     for (int i = 0; i<n; i++) {
         sa[i] = i;
     }
+    int* bucketsIndecies = fasta.alphabet.sightings;
+    int accumSum = 0;
+    for(int i=0; i<fasta.alphabet.size; i++) { //TODO invariant will break when multiple fastas. Make into multiple functions
+        int sighting = bucketsIndecies[i];
+        bucketsIndecies[i] = accumSum;
+        accumSum += sighting;
+    }
+    int* buckets = calloc(fasta.alphabet.size, sizeof *buckets);
 
+    for(int i=n-1; i>=0; i--) {
+        for(int j=0; j<fasta.alphabet.size; j++) buckets[i] = 0;
+        for(int j=0; j<n; j++) {
+            //TODO move initilization outside loop
+            int charIndex = ((*currentSa)[j] + i) % n;
+            char c = x[charIndex];
+            int elemInBucket = buckets[c]++;
+            int saIndex = bucketsIndecies[c] + elemInBucket;
+            (*otherSa)[saIndex] = (*currentSa)[j];
+        }
+        temp = currentSa;
+        currentSa = otherSa;
+        otherSa = temp;
+    }
 
     return sa;
 }
