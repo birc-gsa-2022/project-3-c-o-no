@@ -2,6 +2,8 @@
 #include "minunit.h"
 #include "../src/parsers/simple-fasta-parser.h"
 #include "../src/helper.h"
+#include "testHelper.h"
+
 
 void test_setup(void) {
     /* Nothing */
@@ -102,26 +104,6 @@ MU_TEST_SUITE(fasta_parser_test_suite) {
     run_all_fasta_parser_tests();
 }
 
-void lazy_alloc() {
-    test_data_path = malloc(1000);
-    mis_fa_file = malloc(1000);
-    mis_fastq_file = malloc(1000);
-}
-
-void init(char *root) {
-    lazy_alloc();
-
-    test_data_path = root;
-    strcpy(mis_fa_file, test_data_path);
-    strcpy(mis_fastq_file, test_data_path);
-
-    // Append test-data/ to all files
-    strcat(mis_fa_file, "test-data/");
-    strcat(mis_fastq_file, "test-data/");
-
-    strcat(mis_fa_file, "mis.fa");
-    strcat(mis_fastq_file, "mis.fastq");
-}
 
 int main(int argc, char *argv[]) {
     // Path to the folder where test-data is located should be given.

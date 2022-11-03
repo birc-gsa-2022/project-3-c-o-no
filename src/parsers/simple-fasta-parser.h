@@ -107,6 +107,11 @@ void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
     f->fasta_sequence_debugger = debugger;
 }
 
+struct FastaContainer {
+    struct Fasta ** fastas;
+    int numberOfFastas;
+};
+
 struct Fasta **parse_fasta(char *fasta_str) {
     struct Fasta **fastas = malloc(magic_number*sizeof (**fastas));
     int i = 0;
@@ -117,7 +122,10 @@ struct Fasta **parse_fasta(char *fasta_str) {
         update_fasta_by_sequence(&fasta_str, f);
         fastas[i++] = f;
     }
-    return fastas;
+    struct FastaContainer *fastaCont = malloc(sizeof *fastaCont);
+    fastaCont->fastas = fastas;
+    fastaCont->numberOfFastas = i;
+    return fastaCont;
 }
 
 #endif //SIMPLE_FASTA_PARSER_H

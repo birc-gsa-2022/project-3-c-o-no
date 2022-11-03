@@ -2,6 +2,8 @@
 #define SIMPLE_FASTQ_PARSER_H
 #include <ctype.h>
 
+
+
 char *read_fastq_head(char **strptr) {
     char *string = *strptr;
     // We assume first character is '@', so skip it

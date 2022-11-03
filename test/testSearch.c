@@ -1,6 +1,8 @@
 #include "minunit.h"
 #include "../src/parsers/simple-fasta-parser.h"
 #include "../src/sa.h"
+#include "testHelper.h"
+
 
 void test_setup(void) {
     /* Nothing */
@@ -28,6 +30,7 @@ MU_TEST(test_search_abc) {
     strcpy(seq, sequence);
     char * pattern = malloc(sizeof(* pattern)*3);
     char * pat = "ABC";
+    strcpy(pattern, pat);
     int * sa = malloc(sizeof(* sa)*7);
     sa[0] = 6;
     sa[1] = 3;
@@ -36,10 +39,12 @@ MU_TEST(test_search_abc) {
     sa[4] = 1;
     sa[5] = 5;
     sa[6] = 2;
+    struct Fasta * fasta = malloc(sizeof *fasta);
+    update_fasta_by_sequence(&seq, fasta);
 
-    struct Interval inter = searchPattenInSA(seq, pat, sa, 6, 3);
-    mu_assert_int_eq(inter.start, 2);
-    mu_assert_int_eq(inter.end, 4);
+    struct Interval inter = searchPattenInSA(*fasta, pattern, sa, 3);
+    mu_assert_int_eq(3, inter.end);
+    mu_assert_int_eq(1, inter.start);
 }
 
 

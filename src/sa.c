@@ -17,30 +17,42 @@ int main(int argc, char const *argv[])
     char *fasta_str = read_file(genome_fname);
     char *reads_str = read_file(reads_fname);
 
-    struct Fasta *fastas = *parse_fasta(fasta_str);
+    struct FastaContainer *fastaCont = parse_fasta(fasta_str);
 
-    char *fastq_header = read_fastq_head(&reads_str);
-    char *pattern = read_fastq_pattern(&reads_str);
-    int pattern_len = (int) strlen(pattern);
+    int ** SAs = constructMultipleSARadix(fastaCont);
+    struct Fasta **fastas = fastaCont->fastas;
 
 
-    struct Fasta *start_of_fastas = fastas;
-    while (fastas != NULL) {
-        if(fastas->fasta_len == 0) {
-            fastas += sizeof *fastas; //TODO change
-            continue;
+    while (reads_str[0] != '\0') {
+        char *fastq_header = read_fastq_head(&reads_str);
+        char *pattern = read_fastq_pattern(&reads_str);
+        int pattern_len = (int) strlen(pattern);
+
+
+        struct Fasta **start_of_fastas = fastas;
+        int ** startOfSAs = SAs;
+
+        while (*fastas != NULL) {
+            if ((*fastas)->fasta_len == 0) {
+                fastas++;
+                SAs++;
+                continue;
+            }
+            struct Interval interval = searchPatternInSA(**fastas, pattern, *SAs, pattern_len);
+
+            for (int i = interval.start; i < interval.end; i++) {
+                printf("%s\t%s\t%d\t%dM\t%s\n", fastq_header, (*fastas)->fasta_head, (*SAs)[i], pattern_len, pattern);
+            }
+
+            fastas++;
+            SAs++;
         }
-        int * sa = constructSARadix(*fastas);
-        struct Interval interval = searchPattenInSA((*fastas).fasta_sequence, pattern, sa, (*fastas).fasta_len, pattern_len);
-        printf("start: %d\nend: %d", interval.start, interval.end);
+        fastas = start_of_fastas;
+        SAs = startOfSAs;
 
-        fastas += sizeof *fastas; //TODO change
-        break; //TODO REMOVE. Just for now
+
+        //printf("Search in %s for reads from %s\n", genome_fname, reads_fname);
     }
-
-
-    //printf("Search in %s for reads from %s\n", genome_fname, reads_fname);
-
     return 0;
 
 }
