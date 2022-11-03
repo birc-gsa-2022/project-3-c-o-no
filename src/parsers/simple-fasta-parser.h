@@ -73,7 +73,7 @@ void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
 
     string[i] = 0;
 
-    //*strptr = *(&strptr + i + shift);
+    //*strptr = ((int)*strptr) + i + shift;
     strptr += i+shift; //TODO test for larger files
 
     int * sight = malloc(alphabetSize*sizeof *sight);
@@ -104,7 +104,7 @@ void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
 }
 
 struct Fasta **parse_fasta(char *fasta_str) {
-    struct Fasta **fastas = malloc(magic_number*sizeof (char*));
+    struct Fasta **fastas = malloc(magic_number*sizeof (**fastas));
     int i = 0;
     while (fasta_str[0] != '\0') {
         char *header = read_fasta_head(&fasta_str);

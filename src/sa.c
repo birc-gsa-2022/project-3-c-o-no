@@ -16,7 +16,7 @@ int * constructSARadix(struct Fasta fasta)
     int* saCopy = malloc(n * sizeof *sa);
     int** currentSa = &sa;
     int** otherSa = &saCopy;
-    int** temp = &sa;
+    int** temp;
 
     for (int i = 0; i<n; i++) {
         sa[i] = i;
@@ -28,10 +28,10 @@ int * constructSARadix(struct Fasta fasta)
         bucketsIndecies[i] = accumSum;
         accumSum += sighting;
     }
-    int* buckets = calloc(fasta.alphabet.size, sizeof *buckets);
+    int* buckets = malloc(fasta.alphabet.size*sizeof *buckets);
 
     for(int i=n-1; i>=0; i--) {
-        for(int j=0; j<fasta.alphabet.size; j++) buckets[i] = 0;
+        for(int j=0; j<fasta.alphabet.size; j++) buckets[j] = 0;
         for(int j=0; j<n; j++) {
             //TODO move initilization outside loop
             int charIndex = ((*currentSa)[j] + i) % n;
@@ -48,9 +48,16 @@ int * constructSARadix(struct Fasta fasta)
     return sa;
 }
 
+int * searchPattenInSA(char* x, char* pattern, int* sa, int n, int m) {
+
+
+}
+
+
+
 char *read_file(const char *file_name) {
     FILE *fp;
-    fp = fopen(file_name, "rb+");
+    fp = fopen(file_name, "rb");
 
     fseek(fp, 0, SEEK_END);
     long fsize = ftell(fp);
@@ -80,18 +87,16 @@ int main(int argc, char const *argv[])
 
     struct Fasta *fastas = *parse_fasta(fasta_str);
 
-    // As we parse the reads, we pattern match the read against our above-parsed FASTA sequences
-    while (reads_str[0] != '\0') {
-        char *fastq_header = read_fastq_head(&reads_str);
-        char *pattern = read_fastq_pattern(&reads_str);
-        int pattern_len = (int) strlen(pattern);
 
-        struct Fasta *start_of_fastas = fastas;
-        while (fastas != NULL) {
-            printIntArray(constructSARadix(*fastas), 3); //TODO Change to real one. This is just debug
-            fastas++;
+    struct Fasta *start_of_fastas = fastas;
+    while (fastas != NULL) {
+        if(fastas->fasta_len == 0) {
+            fastas += sizeof *fastas; //TODO change
+            continue;
         }
-        fastas = start_of_fastas;
+        printIntArray(constructSARadix(*fastas), fastas->fasta_len); //TODO Change to real one. This is just debug
+        fastas += sizeof *fastas; //TODO change
+        break; //TODO REMOVE. Just for now
     }
 
 

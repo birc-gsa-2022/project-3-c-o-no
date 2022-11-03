@@ -1,8 +1,9 @@
 void printIntArray(int * a, int len) {
+    printf("[");
     for(int i=0; i<len; i++) {
-        printf("%d", a[i]);
+        printf("%d,", a[i]);
     }
-    printf("\n");
+    printf("]\n");
 }
 
 void printString(char * a, int len) {
