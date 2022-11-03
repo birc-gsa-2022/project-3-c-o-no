@@ -2,7 +2,7 @@
 #define SIMPLE_FASTA_PARSER_H
 #include <ctype.h>
 #include <malloc.h>
-#define ASCIISIZE 128 //Not including non-printable above 127
+#define LPA 128 // Last printable ascii
 #define FPA 32 // First printable ascii
 
 int magic_number = 80000000;
@@ -11,17 +11,31 @@ int magic_number = 80000000;
 
 struct Alphabet {
     int size;
-    int * symbols; //TODO delete
-    int * sightings;
+    int *symbols; //TODO delete
+    int *sightings;
 };
 
 struct Fasta {
-    char* fasta_head;
-    char* fasta_sequence;
-    char* fasta_sequence_debugger; //TODO remove
+    char *fasta_head;
+    char *fasta_sequence;
+    char *fasta_sequence_debugger; //TODO remove
     int fasta_len;
     struct Alphabet alphabet;
 };
+
+int *alloc_sightings(int *bigAlphabet, int alphabetSize) {
+    int *sight = malloc(alphabetSize * sizeof *sight);
+    sight[0] = 1;
+    int j = 1;
+    for(int k=FPA; k<ASCIISIZE; k++) {
+        if(bigAlphabet[k]) {
+            sight[j] = bigAlphabet[k];
+            bigAlphabet[k] = j++;
+        }
+    }
+    return sight;
+}
+
 
 char *read_fasta_head(char **strptr) {
     char *string = *strptr;
@@ -49,7 +63,9 @@ char *read_fasta_head(char **strptr) {
 }
 
 void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
-    int *bigAlphabet = calloc(ASCIISIZE, sizeof(*bigAlphabet));
+    // Space for all printable ascii chars, where each entry corresponds to how many times we've seen a character
+    int *bigAlphabet = calloc(LPA, sizeof(int));
+    // alphabetSize is for example 5 for ACGT (+1 for sentinel)
     int alphabetSize = 1;
 
     char *string = *strptr;
@@ -66,41 +82,27 @@ void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
         }
         // Add shift
         char c = string[i+shift];
-        if(!(bigAlphabet[c]++)) alphabetSize++; //If first time seen symbol, add to size
-        string[i] = string[i+shift];
+        string[i] = c;
+        if(!(bigAlphabet[c]++)) alphabetSize++; // If first time seen symbol, add to size
         i++;
     }
-    // Terminate with \0 and return the pointer to the first instance of >
-
+    // Terminate with \0 and move the pointer to the first instance of >
     string[i] = 0;
-
-    //*strptr = ((int)*strptr) + i + shift;
-    *strptr += i+shift; //TODO test for larger files
-
-    int *sight = malloc(alphabetSize*sizeof *sight);
-    sight[0] = 1;
-    int j = 1;
-    for(int k=FPA; k<ASCIISIZE; k++) {
-        if(bigAlphabet[k]) {
-            sight[j] = bigAlphabet[k];
-            bigAlphabet[k] = j++;
-        }
-    }
-
-    f->fasta_len = i+1;
+    *strptr += i+shift;
 
     char * debugger = malloc((i+1)*sizeof *debugger);
     debugger[i+1] = '\0';
 
     for(int l=0; l<i+1; l++) {
         debugger[l] = string[l];
-        string[l] = bigAlphabet[string[l]];
+        string[l] = (char) bigAlphabet[string[l]];
     }
 
     f->alphabet.size = alphabetSize;
     f->alphabet.symbols = bigAlphabet;
-    f->alphabet.sightings = sight;
+    f->alphabet.sightings = alloc_sightings(bigAlphabet, alphabetSize);
     f->fasta_sequence = string;
+    f->fasta_len = i+1;
     f->fasta_sequence_debugger = debugger;
 }
 
