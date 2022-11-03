@@ -6,7 +6,7 @@
 #include <stdint-gcc.h>
 #include "helper.h"
 
-int * constructSARadix(struct Fasta fasta) {
+int *constructSARadix(struct Fasta fasta) {
     char* x = fasta.fasta_sequence;
     int n = fasta.fasta_len;
     int* sa = malloc(n * sizeof *sa);
@@ -46,6 +46,17 @@ int * constructSARadix(struct Fasta fasta) {
     }
     return *currentSa;
 }
+
+int **constructMultipleSARadix(struct FastaContainer *fastaContainer) {
+    int ** SAs = malloc(fastaContainer->numberOfFastas*sizeof *SAs);
+
+    for(int i=0; i<fastaContainer->numberOfFastas; i++) {
+        int *sa = constructSARadix(*(fastaContainer->fastas)[i]);
+        SAs[i] = sa;
+    }
+    return SAs;
+}
+
 
 struct Interval {
     int start;

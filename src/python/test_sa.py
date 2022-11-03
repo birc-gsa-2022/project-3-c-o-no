@@ -47,5 +47,3 @@ def test_compareSA():
     for n in range(50):
         x = "".join(r.choices("actg", k=n))
         compareAlgorithmsSA(x, sa.constructSAradix, sa.constructSAtree)
-
-print(int(5.5))

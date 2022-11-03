@@ -112,7 +112,7 @@ struct FastaContainer {
     int numberOfFastas;
 };
 
-struct Fasta **parse_fasta(char *fasta_str) {
+struct FastaContainer *parse_fasta(char *fasta_str) {
     struct Fasta **fastas = malloc(magic_number*sizeof (**fastas));
     int i = 0;
     while (fasta_str[0] != '\0') {

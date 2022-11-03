@@ -15,10 +15,6 @@ void test_teardown(void) {
 
 //int (*test_fun)(char*, char*, int, int);
 
-char *test_data_path;
-
-char *mis_fa_file;
-char *mis_fastq_file;
 
 MU_TEST(test_parser_abc) {
     char * mal = malloc(sizeof(int)*3);
@@ -76,7 +72,8 @@ MU_TEST(test_parser_aLong) {
 
 MU_TEST(test_parser_mis) {
     char *file = read_file(mis_fa_file);
-    struct Fasta **fastas = parse_fasta(file);
+    struct FastaContainer *fastasContainer = parse_fasta(file);
+    struct Fasta **fastas = fastasContainer->fastas;
 
     mu_assert_string_eq("chr1", (*fastas)->fasta_head);
     // I = 1, M = 2, P = 3, S = 4
