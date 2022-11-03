@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
             }
             struct Interval interval = searchPatternInSA(**fastas, pattern, *SAs, pattern_len);
             for (int i = interval.start; i < interval.end; i++) {
-                printf("%s\t%s\t%d\t%dM\t%s\n", fastq_header, (*fastas)->fasta_head, (*SAs)[i], pattern_len, pattern);
+                printf("%s\t%s\t%d\t%dM\t%s\n", fastq_header, (*fastas)->fasta_head, (*SAs)[i]+1, pattern_len, pattern);
             }
 
             fastas++;
