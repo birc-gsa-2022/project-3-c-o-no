@@ -89,6 +89,7 @@ void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
     // Terminate with \0 and move the pointer to the first instance of >
     string[i] = 0;
     *strptr += i+shift;
+    int *sightings = alloc_sightings(bigAlphabet, alphabetSize);
 
     char * debugger = malloc((i+1)*sizeof *debugger);
     debugger[i+1] = '\0';
@@ -100,7 +101,7 @@ void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
 
     f->alphabet.size = alphabetSize;
     f->alphabet.symbols = bigAlphabet;
-    f->alphabet.sightings = alloc_sightings(bigAlphabet, alphabetSize);
+    f->alphabet.sightings = sightings;
     f->fasta_sequence = string;
     f->fasta_len = i+1;
     f->fasta_sequence_debugger = debugger;
