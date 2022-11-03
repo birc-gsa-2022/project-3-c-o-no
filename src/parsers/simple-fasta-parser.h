@@ -48,11 +48,11 @@ char *read_fasta_head(char **strptr) {
     return header_start;
 }
 
-void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
+void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
     int *bigAlphabet = calloc(ASCIISIZE, sizeof(*bigAlphabet));
     int alphabetSize = 1;
 
-    char *string = strptr;
+    char *string = *strptr;
     int i = 0;
     int shift = 0;
     while (1) {
@@ -75,9 +75,9 @@ void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
     string[i] = 0;
 
     //*strptr = ((int)*strptr) + i + shift;
-    strptr += i+shift; //TODO test for larger files
+    *strptr += i+shift; //TODO test for larger files
 
-    int * sight = malloc(alphabetSize*sizeof *sight);
+    int *sight = malloc(alphabetSize*sizeof *sight);
     sight[0] = 1;
     int j = 1;
     for(int k=FPA; k<ASCIISIZE; k++) {
@@ -111,7 +111,7 @@ struct Fasta **parse_fasta(char *fasta_str) {
         char *header = read_fasta_head(&fasta_str);
         struct Fasta *f = malloc(sizeof(*f));
         f->fasta_head = header;
-        update_fasta_by_sequence(fasta_str, f);
+        update_fasta_by_sequence(&fasta_str, f);
         fastas[i++] = f;
     }
     return fastas;

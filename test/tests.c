@@ -23,7 +23,7 @@ MU_TEST(test_parser_abc) {
     char * sequence = "ABC";
     strcpy(mal, sequence);
     struct Fasta * f = malloc(sizeof *f);
-    update_fasta_by_sequence(mal, f);
+    update_fasta_by_sequence(&mal, f);
 
     mu_assert_int_eq(4, f->fasta_len);
     mu_assert_int_eq(4, f->alphabet.size);
@@ -51,7 +51,7 @@ MU_TEST(test_parser_aaaa) {
     char * sequence = "AAAA";
     strcpy(mal, sequence);
     struct Fasta * f = malloc(sizeof *f);
-    update_fasta_by_sequence(mal, f);
+    update_fasta_by_sequence(&mal, f);
 
     mu_assert_int_eq(5, f->fasta_len);
     mu_assert_int_eq(2, f->alphabet.size);
@@ -64,7 +64,7 @@ MU_TEST(test_parser_aLong) {
     char * sequence = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     strcpy(mal, sequence);
     struct Fasta * f = malloc(sizeof *f);
-    update_fasta_by_sequence(mal, f);
+    update_fasta_by_sequence(&mal, f);
 
     mu_assert_int_eq(101, f->fasta_len);
     mu_assert_int_eq(2, f->alphabet.size);
