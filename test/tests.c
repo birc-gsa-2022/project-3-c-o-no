@@ -1,5 +1,7 @@
+#include <stdbool.h>
 #include "minunit.h"
 #include "../src/parsers/simple-fasta-parser.h"
+#include "../src/helper.h"
 
 void test_setup(void) {
     /* Nothing */
@@ -10,6 +12,11 @@ void test_teardown(void) {
 }
 
 //int (*test_fun)(char*, char*, int, int);
+
+char *test_data_path;
+
+char *mis_fa_file;
+char *mis_fastq_file;
 
 MU_TEST(test_parser_abc) {
     char * mal = malloc(sizeof(int)*3);
@@ -65,18 +72,62 @@ MU_TEST(test_parser_aLong) {
     mu_assert_int_eq(100, f->alphabet.sightings[1]);
 }
 
+MU_TEST(test_parser_mis) {
+    char *file = read_file(mis_fa_file);
+    struct Fasta **fastas = parse_fasta(file);
+
+    mu_assert_string_eq("chr1", (*fastas)->fasta_head);
+    // I = 1, M = 2, P = 3, S = 4
+    int chr1[11] = {2,1,4,4,1,4,4,1,3,3,1};
+    mu_assert_int_arr_eq(chr1, (*fastas)->fasta_sequence);
+    mu_assert_int_eq(12, (*fastas)->fasta_len);
+
+    // Go to next fasta
+    fastas++;
+    mu_assert_string_eq("chr2", (*fastas)->fasta_head);
+    // I = 1, M = 2, P = 3, S = 4
+    int chr2[22] = {2,1,4,4,1,4,4,1,3,3,1,2,1,4,4,1,4,4,1,3,3,1};
+    mu_assert_int_arr_eq(chr2, (*fastas)->fasta_sequence);
+    mu_assert_int_eq(23, (*fastas)->fasta_len);
+}
 
 void run_all_fasta_parser_tests() {
     MU_RUN_TEST(test_parser_abc);
     MU_RUN_TEST(test_parser_aaaa);
     MU_RUN_TEST(test_parser_aLong);
+    MU_RUN_TEST(test_parser_mis);
 }
 
 MU_TEST_SUITE(fasta_parser_test_suite) {
     run_all_fasta_parser_tests();
 }
 
+void lazy_alloc() {
+    test_data_path = malloc(1000);
+    mis_fa_file = malloc(1000);
+    mis_fastq_file = malloc(1000);
+}
+
+void init(char *root) {
+    lazy_alloc();
+
+    test_data_path = root;
+    strcpy(mis_fa_file, test_data_path);
+    strcpy(mis_fastq_file, test_data_path);
+
+    // Append test-data/ to all files
+    strcat(mis_fa_file, "test-data/");
+    strcat(mis_fastq_file, "test-data/");
+
+    strcat(mis_fa_file, "mis.fa");
+    strcat(mis_fastq_file, "mis.fastq");
+}
+
 int main(int argc, char *argv[]) {
+    // Path to the folder where test-data is located should be given.
+    // (typically ../ if running from the debugger (project_root/cmake-build-debug/....
+    // or ./ if running directly from project root)
+    init(argv[1]);
     MU_RUN_SUITE(fasta_parser_test_suite);
     MU_REPORT();
     return MU_EXIT_CODE;

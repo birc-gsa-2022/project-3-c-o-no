@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <malloc.h>
 #define ASCIISIZE 128 //Not including non-printable above 127
+#define FPA 32 // First printable ascii
 
 int magic_number = 80000000;
 
@@ -48,7 +49,7 @@ char *read_fasta_head(char **strptr) {
 }
 
 void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
-    int * bigAlphabet = calloc(ASCIISIZE, sizeof(int));
+    int *bigAlphabet = calloc(ASCIISIZE, sizeof(*bigAlphabet));
     int alphabetSize = 1;
 
     char *string = strptr;
@@ -79,7 +80,7 @@ void update_fasta_by_sequence(char *strptr, struct Fasta *f) {
     int * sight = malloc(alphabetSize*sizeof *sight);
     sight[0] = 1;
     int j = 1;
-    for(int k=0; k<ASCIISIZE; k++) {
+    for(int k=FPA; k<ASCIISIZE; k++) {
         if(bigAlphabet[k]) {
             sight[j] = bigAlphabet[k];
             bigAlphabet[k] = j++;

@@ -185,6 +185,25 @@ static void (*minunit_teardown)(void) = NULL;
 	}\
 )
 
+
+#define mu_assert_int_arr_eq(expected, result) MU__SAFE_BLOCK( \
+	size_t n = sizeof(expected)/sizeof((expected)[0]); \
+    minunit_assert++;                                          \
+    for (int i = 0; i < n; i++) { \
+        int minunit_tmp_e;\
+        int minunit_tmp_r;\
+        minunit_tmp_e = (expected)[i];\
+        minunit_tmp_r = (result)[i];\
+        if (minunit_tmp_e != minunit_tmp_r) {\
+            snprintf(minunit_last_message, MINUNIT_MESSAGE_LEN, "%s failed:\n\t%s:%d: %d expected but was %d", __func__, __FILE__, __LINE__, minunit_tmp_e, minunit_tmp_r);\
+            minunit_status = 1;\
+            return;\
+        } else {\
+            printf(".");\
+        }\
+    } \
+)
+
 #define mu_assert_double_eq(expected, result) MU__SAFE_BLOCK(\
 	double minunit_tmp_e;\
 	double minunit_tmp_r;\
