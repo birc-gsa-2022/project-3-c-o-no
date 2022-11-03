@@ -27,7 +27,7 @@ int *alloc_sightings(int *bigAlphabet, int alphabetSize) {
     int *sight = malloc(alphabetSize * sizeof *sight);
     sight[0] = 1;
     int j = 1;
-    for(int k=FPA; k<ASCIISIZE; k++) {
+    for(int k=FPA; k<LPA; k++) {
         if(bigAlphabet[k]) {
             sight[j] = bigAlphabet[k];
             bigAlphabet[k] = j++;
