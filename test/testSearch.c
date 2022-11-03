@@ -49,6 +49,7 @@ MU_TEST(test_search_abc) {
 
 
 void run_all_fasta_parser_tests() {
+    MU_RUN_TEST(test_binary_search);
     MU_RUN_TEST(test_search_mis);
     MU_RUN_TEST(test_search_abc);
 }

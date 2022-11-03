@@ -57,7 +57,7 @@ struct Interval binarySearch(const char* x, const int* sa, char patchar, int par
     char xchar;
     while (interval.start != interval.end) {
         interval.mid = (interval.start+interval.end)/2;
-        xchar = x[sa[interval.mid]] + parIndex;
+        xchar = x[sa[interval.mid]+parIndex];
         if(patchar == xchar) {
             if(!mode) return interval;
             if(mode==1) interval.start = interval.mid + 1;
