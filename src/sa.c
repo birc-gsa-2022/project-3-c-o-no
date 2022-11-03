@@ -54,23 +54,6 @@ int * searchPattenInSA(char* x, char* pattern, int* sa, int n, int m) {
 }
 
 
-
-char *read_file(const char *file_name) {
-    FILE *fp;
-    fp = fopen(file_name, "rb");
-
-    fseek(fp, 0, SEEK_END);
-    long fsize = ftell(fp);
-    fseek(fp, 0, SEEK_SET);  /* same as rewind(f); */
-
-    char *string = malloc(fsize + 1);
-    fread(string, fsize, 1, fp);
-    fclose(fp);
-
-    string[fsize] = '\0'; // terminate with zero
-    return string;
-}
-
 int main(int argc, char const *argv[])
 {
 
