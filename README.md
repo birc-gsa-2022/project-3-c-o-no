@@ -15,6 +15,11 @@ Once you have implemented the `sa` program (and tested it to the best of your ab
 
 # Report
 
+Jeg forventer at blive færdig med rapporten i dag (lørdag) <br>
+-Gaia
+
+
+
 ## Algorithm
 
 *Which algorithm did you use to construct the suffix array. What is its running time?*
