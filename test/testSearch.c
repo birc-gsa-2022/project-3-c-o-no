@@ -12,18 +12,6 @@ void test_teardown(void) {
     /* Nothing */
 }
 
-//int (*test_fun)(char*, char*, int, int);
-
-void assertSameListInt(int * list, int * answers, int len) {
-    for(int i=0; i<len; i++) mu_assert_int_eq(list[i], answers[i]);
-}
-
-MU_TEST(test_search_mis) {
-    char *fasta_str = read_file("../test-data/mis.fa");
-    char *reads_str = read_file("../test-data/mis.fastq");
-}
-
-
 MU_TEST(test_search_abc) {
     char * seq = malloc(sizeof(* seq)*6);
     char * sequence = "ABCABC";
@@ -139,7 +127,6 @@ MU_TEST(test_binary_search) {
 
 void run_all_fasta_parser_tests() {
     MU_RUN_TEST(test_binary_search);
-    MU_RUN_TEST(test_search_mis);
     MU_RUN_TEST(test_search_abc);
     MU_RUN_TEST(test_search_multiple_sa_constr);
 }
