@@ -54,7 +54,6 @@ int main(int argc, char const *argv[])
     free_fasta_container(fastaCont);
 
     return 0;
-
 }
 
 
