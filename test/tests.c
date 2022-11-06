@@ -88,6 +88,8 @@ MU_TEST(test_parser_mis) {
     int chr2[22] = {2,1,4,4,1,4,4,1,3,3,1,2,1,4,4,1,4,4,1,3,3,1};
     mu_assert_int_arr_eq(chr2, (*fastas)->fasta_sequence);
     mu_assert_int_eq(23, (*fastas)->fasta_len);
+
+    free_fasta_container(fastasContainer);
 }
 
 void run_all_fasta_parser_tests() {

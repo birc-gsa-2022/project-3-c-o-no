@@ -33,5 +33,4 @@ char *read_file(const char *file_name) {
 }
 
 
-
 #endif //HERLPER_H

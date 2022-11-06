@@ -7,48 +7,45 @@
 #include "helper.h"
 
 int *constructSARadix(struct Fasta fasta) {
-    char* x = fasta.fasta_sequence;
+    char *x = fasta.fasta_sequence;
     int n = fasta.fasta_len;
-    int* sa = malloc(n * sizeof *sa);
-    int* saCopy = malloc(n * sizeof *sa);
-    int** currentSa = &sa;
-    int** otherSa = &saCopy;
-    int** temp;
+    int *sa = malloc(n * sizeof *sa);
+    int *saCopy = malloc(n * sizeof *sa);
 
     for (int i = 0; i<n; i++) {
         sa[i] = i;
     }
-    int* bucketsIndecies = fasta.alphabet.sightings;
+    int *bucketsIndices = fasta.alphabet.sightings;
     int accumSum = 0;
     for(int i=0; i<fasta.alphabet.size; i++) {
-        int sighting = bucketsIndecies[i];
-        bucketsIndecies[i] = accumSum;
+        int sighting = bucketsIndices[i];
+        bucketsIndices[i] = accumSum;
         accumSum += sighting;
     }
-    int* buckets = malloc(fasta.alphabet.size*sizeof *buckets);
+    int *buckets = malloc(fasta.alphabet.size*sizeof *buckets);
 
-    int charIndex;
-    char c;
-    int elemInBucket;
-    int saIndex;
     for(int i=n-1; i>=0; i--) {
-        for(int j=0; j<fasta.alphabet.size; j++) buckets[j] = 0;
+        memset(buckets, 0, fasta.alphabet.size * sizeof *buckets);
         for(int j=0; j<n; j++) {
-            charIndex = ((*currentSa)[j] + i) % n;
-            c = x[charIndex];
-            elemInBucket = buckets[c]++;
-            saIndex = bucketsIndecies[c] + elemInBucket;
-            (*otherSa)[saIndex] = (*currentSa)[j];
+            int charIndex = (sa[j] + i) % n;
+            char c = x[charIndex];
+            int elemInBucket = buckets[c]++;
+            int saIndex = bucketsIndices[c] + elemInBucket;
+            saCopy[saIndex] = sa[j];
         }
-        temp = currentSa;
-        currentSa = otherSa;
-        otherSa = temp;
+        int *temp = sa;
+        sa = saCopy;
+        saCopy = temp;
     }
-    return *currentSa;
+
+    free(saCopy);
+    free(buckets);
+
+    return sa;
 }
 
 int **constructMultipleSARadix(struct FastaContainer *fastaContainer) {
-    int ** SAs = malloc(fastaContainer->numberOfFastas*sizeof *SAs);
+    int **SAs = malloc(fastaContainer->numberOfFastas*sizeof *SAs);
 
     for(int i=0; i<fastaContainer->numberOfFastas; i++) {
         int *sa = constructSARadix(*(fastaContainer->fastas)[i]);
@@ -86,13 +83,13 @@ struct Interval binarySearch(const char* x, const int* sa, char patchar, int par
 
 struct Interval searchPatternInSA(struct Fasta fasta, const char* pattern, int* sa, int m) {
     char * x = fasta.fasta_sequence;
-    struct Interval * interval = malloc(sizeof *interval);
-    struct Interval * intervalSaver = malloc(sizeof *interval);
+    struct Interval *interval = malloc(sizeof *interval);
+    struct Interval *intervalSaver = malloc(sizeof *interval);
     interval->start = 0;
     interval->end = fasta.fasta_len;
 
     for(int i=0; i<m; i++) {
-        char patchar = fasta.alphabet.symbols[pattern[i]];
+        char patchar = (char) fasta.alphabet.symbols[pattern[i]];
         *interval = binarySearch(x, sa, patchar, i, *interval, 0);
         if(interval->start == interval->end) return *interval;
         intervalSaver->mid = interval->mid;
@@ -108,5 +105,8 @@ struct Interval searchPatternInSA(struct Fasta fasta, const char* pattern, int* 
         *interval = binarySearch(x, sa, patchar, i, *interval, 1);
         interval->start = intervalSaver->start;
     }
+
+    free(intervalSaver);
     return *interval;
 }
+

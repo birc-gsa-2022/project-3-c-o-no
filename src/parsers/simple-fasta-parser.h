@@ -2,6 +2,7 @@
 #define SIMPLE_FASTA_PARSER_H
 #include <ctype.h>
 #include <malloc.h>
+
 #define LPA 128 // Last printable ascii
 #define FPA 32 // First printable ascii
 
@@ -80,9 +81,9 @@ void update_fasta_by_sequence(char **strptr, struct Fasta *f) {
         if (string[i+shift] == '\0' || string[i+shift] == '>') {
             break;
         }
-        // Add shift
+        // Look ahead and store c
         char c = string[i+shift];
-        string[i] = c;
+        string[i] = c; // Apply the shift
         if(!(bigAlphabet[c]++)) alphabetSize++; // If first time seen symbol, add to size
         i++;
     }
@@ -125,7 +126,25 @@ struct FastaContainer *parse_fasta(char *fasta_str) {
     struct FastaContainer *fastaCont = malloc(sizeof *fastaCont);
     fastaCont->fastas = fastas;
     fastaCont->numberOfFastas = i;
+
     return fastaCont;
+}
+
+void free_fastas(struct Fasta **fastas, int count) {
+    for (int i = 0; i < count; ++i) {
+        free(fastas[i]->alphabet.symbols);
+        free(fastas[i]->alphabet.sightings);
+        free(fastas[i]);
+    }
+}
+
+void free_fasta_container(struct FastaContainer *fc) {
+    // Free all the fastas
+    free_fastas(fc->fastas, fc->numberOfFastas);
+    // Free pointers to the fastas
+    free(fc->fastas);
+    // Finally, free the container
+    free(fc);
 }
 
 #endif //SIMPLE_FASTA_PARSER_H
