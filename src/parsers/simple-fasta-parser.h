@@ -5,7 +5,7 @@
 #define LPA 128 // Last printable ascii
 #define FPA 32 // First printable ascii
 
-int magic_number = 80000000;
+int magic_number = 8000;
 
 
 

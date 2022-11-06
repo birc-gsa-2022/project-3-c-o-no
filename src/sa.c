@@ -53,7 +53,6 @@ int main(int argc, char const *argv[])
         //printf("Search in %s for reads from %s\n", genome_fname, reads_fname);
     }
     return 0;
-
 }
 
 

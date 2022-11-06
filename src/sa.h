@@ -108,5 +108,6 @@ struct Interval searchPatternInSA(struct Fasta fasta, const char* pattern, int* 
         *interval = binarySearch(x, sa, patchar, i, *interval, 1);
         interval->start = intervalSaver->start;
     }
+    free(intervalSaver);
     return *interval;
 }
