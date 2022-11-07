@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.21"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "sa",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "sa::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-sa-Debug-e641d3daaa9a01b9813e.json",
+					"name" : "sa",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "testing1::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-testing1-Debug-1f91529d23cf4304e2eb.json",
+					"name" : "testing1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "testing2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-testing2-Debug-211400566a757f2fa0a6.json",
+					"name" : "testing2",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Gaia/github-classroom/birc-gsa-2022/project-3-c-o-no/build",
+		"source" : "C:/Users/Gaia/github-classroom/birc-gsa-2022/project-3-c-o-no"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
